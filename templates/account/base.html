@@ -1,43 +1,74 @@
-{% load i18n %}
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block head_title %}{% endblock head_title %}</title>
-    {% block extra_head %}
-    {% endblock extra_head %}
-  </head>
-  <body>
-    {% block body %}
+{% extends 'auth_style/base.html' %}
 
-    {% if messages %}
-    <div>
-      <strong>{% trans "Messages:" %}</strong>
-      <ul>
-        {% for message in messages %}
-        <li>{{message}}</li>
-        {% endfor %}
-      </ul>
-    </div>
-    {% endif %}
+{% load account %}
 
-    <div>
-      <strong>{% trans "Menu:" %}</strong>
-      <ul>
-        {% if user.is_authenticated %}
-        <li><a href="{% url 'account_email' %}">{% trans "Change Email" %}</a></li>
-        <li><a href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a></li>
-        {% else %}
-        <li><a href="{% url 'account_login' %}">{% trans "Sign In" %}</a></li>
-        <li><a href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a></li>
+{% block body %}
+  <body class="bg-gray-100 min-h-screen font-sans text-neutral">
+
+    <div class="navbar mb-2">
+      <div class="flex-1 px-2 mx-2">
+        {% if site %}
+          <span class="text-lg font-bold">
+            Catálogo Filmes
+          </span>
         {% endif %}
-      </ul>
+      </div>
+      <div class="flex px-2 mx-2">
+        <div class="flex items-stretch">
+          {% if request.user.is_authenticated %}
+            <div class="dropdown dropdown-hover">
+              <div tabindex="0" class="m-1 btn btn-ghost group font-normal normal-case">
+                <i class="ri-account-circle-fill mr-2 text-primary text-xl transition-all group-hover:text-primary-focus"></i>
+                {{ request.user.email }}
+                <i class="ri-arrow-down-s-line opacity-50 ml-2 text-gray-500 text-xl transition-all"></i>
+              </div>
+              <ul tabindex="0" class="p-2 shadow menu dropdown-content bg-white rounded-box w-full">
+                {% include 'account/snippets/sub_menu_item.html' with url_name='account_email' text='Change Email' icon_class='ri-mail-settings-line' only %}
+                {% include 'account/snippets/sub_menu_item.html' with url_name='account_change_password' text='Change Password' icon_class='ri-key-2-line' only %}
+                {% include 'account/snippets/sub_menu_item.html' with url_name='account_logout' text='Sign Out' icon_class='ri-logout-circle-line' only %}
+              </ul>
+            </div>
+          {% else %}
+            <div class="space-x-1">
+              {% include 'account/snippets/menu_item.html' with url_name='account_login' text='Entrar' icon_class='ri-user-shared-line' only %}
+              {% include 'account/snippets/menu_item.html' with url_name='account_signup' text='Cadastrar' icon_class='ri-user-add-line' only %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
     </div>
-    {% block content %}
-    {% endblock content %}
-    {% endblock body %}
-    {% block extra_body %}
-    {% endblock extra_body %}
+
+    <div class="flex flex-col relative">
+      <div class="container mx-auto pb-12">
+        <div class="sm:mx-auto sm:w-full sm:max-w-md">
+          <div id="messages" class="py-4">
+            <ul class="space-y-2">
+              {% for message in messages %}
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                  {% include 'account/snippets/message_item.html' with type='alert-success' icon_class='ri-checkbox-circle-line' message=message only %}
+                {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                  {% include 'account/snippets/message_item.html' with type='alert-warning' icon_class='ri-alert-line' message=message only %}
+                {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                  {% include 'account/snippets/message_item.html' with type='alert-error' icon_class='ri-spam-3-line' message=message only %}
+                {% elif message.level == DEFAULT_MESSAGE_LEVELS.info %}
+                  {% include 'account/snippets/message_item.html' with type='alert-info' icon_class='ri-information-line' message=message only %}
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        {% if messages %}
+
+        {% endif %}
+
+        <div class="sm:mx-auto sm:w-full sm:max-w-lg bg-white card">
+          <div class="card-body">
+            {% block content %}{% endblock %}
+          </div>
+        </div>
+
+        {% block extra_body %}{% endblock %}
+      </div>
+    </div>
   </body>
-</html>
+{% endblock %}

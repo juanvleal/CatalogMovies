@@ -1,0 +1,35 @@
+{% extends "home/base.html" %}
+
+{% block title %}
+    {{ details_movie.title }}
+{% endblock %}
+
+{% block main %}
+    <div class="container ">
+        <div class="card mb-3">
+            <div class="row g-0">
+              <div class="col-md-4">
+                <img src="https://image.tmdb.org/t/p/w300{{ details_movie.poster_path }}" class="img-fluid rounded-start" alt="...">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title">{{ details_movie.title }}</h5>
+                  <p class="card-text">{{ details_movie.overview }}</p>
+                  <p class="card-text"><strong>Informações Gerais:</strong></p>
+                  <p>
+                    <strong>Data de Lançamento:</strong> {{ details_movie.release_date }} <br>
+                    <strong>Duração: </strong> {{ details_movie.runtime }} minutos <br>
+                </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        <hr>
+        <h2>Gêneros</h2>
+        <ul class="list-group list-group-flush">
+            {% for g in details_movie.genres %}
+                <li class="list-group-item">{{ g.name }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
