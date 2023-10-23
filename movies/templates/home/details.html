@@ -5,31 +5,45 @@
 {% endblock %}
 
 {% block main %}
-    <div class="container px-4">
-        <div class="card mb-3">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src="https://image.tmdb.org/t/p/w300{{ details_movie.poster_path }}" class="img-fluid rounded-start" alt="...">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h2 class="card-title">{{ details_movie.title }}</h2>
-                  <p class="card-text">{{ details_movie.overview }}</p>
-                  <p class="card-text"><strong>Informações Gerais:</strong></p>
-                  <p>
-                    <strong>Data de Lançamento:</strong> {{ details_movie.release_date }} <br>
-                    <strong>Duração: </strong> {{ details_movie.runtime }} minutos <br>
-                    <hr>
-                    <h5>Gêneros</h5>
-                    <ul class="list-group list-group-flush">
-                        {% for g in details_movie.genres %}
-                            <li class="card-text">{{ g.name }}</li>
-                        {% endfor %}
-                    </ul>
-                </p>
-                </div>
+  <div class="container px-4">
+      <div class="card mb-3">
+          <div class="row g-0">
+            <div class="col-md-4">
+              <img src="https://image.tmdb.org/t/p/w300{{ details_movie.poster_path }}" class="img-fluid rounded-start" alt="...">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h2 class="card-title">{{ details_movie.title }}</h2>
+                <p class="card-text">{{ details_movie.overview }}</p>
+                <p>
+                  <strong>Data de Lançamento:</strong> {{ details_movie.release_date|date:"d/m/Y" }} <br>
+                  <strong>Duração: </strong> {{ details_movie.runtime }} minutos <br>
+                  <hr>
+                  <h5>Gêneros</h5>
+                  <ul class="list-group list-group-flush">
+                      {% for g in details_movie.genres %}
+                          <li class="card-text">{{ g.name }}</li>
+                      {% endfor %}
+                  </ul>
+              </p>
               </div>
             </div>
           </div>
-    </div>
+        </div>
+        <div class="row justify-content-center">
+          <h3>Filmes Similares:</h3>
+          {% for data in similar_movies.results %}
+                      <div class="card mx-2 my-2" style="width: 18rem">
+                          <img
+                              src="https://image.tmdb.org/t/p/w200{{ data.poster_path }}"
+                              class="card-img-top p-2 "
+                          />
+                          <div class="card-body">
+                              <h5 class="card-title">{{ data.title }}</h5>
+                          </div>
+                          <a href="/details/{{ data.id }}/" class="btn btn-primary mb-2">Ver Detalhes</a>
+                      </div>
+          {% endfor %} 
+      </div>
+  </div>
 {% endblock %}

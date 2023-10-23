@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.views.generic import TemplateView
 from movies.services.movies import Movies
 from django.utils.decorators import method_decorator
@@ -29,5 +30,7 @@ class MoviesDetailListView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         get_details_movie = Movies().get_details_movie(context['movieId'])
-        context.update({"details_movie":get_details_movie})
+        get_details_movie['release_date'] = datetime.strptime(get_details_movie['release_date'], "%Y-%m-%d").date()
+        get_similar_movies = Movies().get_similar_movies(context['movieId'])
+        context.update({"details_movie":get_details_movie, "similar_movies":get_similar_movies})
         return context

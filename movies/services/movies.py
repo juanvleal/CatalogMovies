@@ -29,4 +29,13 @@ class Movies:
             return response.json()
         else:
             return "erro"
+        
+    def get_similar_movies(self, movieId):
+        url = f"https://api.themoviedb.org/3/movie/{movieId}/similar?language=pt-BR"
+        headers = self.get_headers()
+        response = requests.get(url, headers=headers)
+        if(response.status_code == 200):
+            return response.json()
+        else:
+            return "erro"
 
