@@ -7,7 +7,15 @@ class MoviesListView(TemplateView):
     template_name = "home/home.html"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        get_movies = Movies().get_movies
+        get_movies = Movies().get_movies(1)
+        context.update({"movies":get_movies})
+        return context
+    
+class MoviesListViewPage(TemplateView):
+    template_name = "home/home.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        get_movies = Movies().get_movies(context['page'])
         context.update({"movies":get_movies})
         return context
     

@@ -12,8 +12,8 @@ class Movies:
             "Authorization": config("TMDBToken"),
         }
 
-    def get_movies(self):
-        url = "https://api.themoviedb.org/3/movie/popular?language=pt-BR&page=1&include_adult=false"
+    def get_movies(self, page):
+        url = f"https://api.themoviedb.org/3/movie/popular?language=pt-BR&page={page}&include_adult=false"
         headers = self.get_headers()
         response = requests.get(url, headers=headers)
         if(response.status_code == 200):
